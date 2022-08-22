@@ -2,8 +2,6 @@ import './css/styles.css';
 import SimpleLightbox from 'simplelightbox';
 const axios = require('axios').default;
 import { refs } from './modules/refs.js';
-// var debounce = require('lodash.debounce');
-// const DEBOUNCE_DELAY = 300;
 const BASE_URL = '';
 const config = {
   url: 'https://pixabay.com/api/',
@@ -29,12 +27,6 @@ function onFormSubmit(event) {
 console.log(config);
 async function getUser() {
   try {
-    // const response = await axios.get(
-    //   'https://pixabay.com/api/?key=29419460-174de553ef6eeb556d53fec27&q=yellow+flowers&image_type=photo&per_page=10&page=2'
-
-    // );
-
-    // const response = await axios.get('https://pixabay.com/api/', config);
     const response = await axios(config);
     console.log(response.data);
   } catch (error) {
@@ -42,7 +34,4 @@ async function getUser() {
   }
 }
 
-// const sres = () => {
-//   return '1';
-// };
-// console.log(sres());
+// getUser();
