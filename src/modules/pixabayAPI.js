@@ -22,7 +22,7 @@ export default class {
       else this.config.params.q = query;
       const response = await axios(this.config);
       console.log(response.data);
-      return response.data.hits;
+      return response.data;
     } catch (error) {
       Notify.failure(
         "We're sorry, but you've reached the end of search results."

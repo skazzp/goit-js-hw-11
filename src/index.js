@@ -14,37 +14,42 @@ refs.loadMore.addEventListener('click', onLoadMoreClick);
 async function onFormSubmit(event) {
   event.preventDefault();
   let query = refs.searchQuery.value.split(' ').join('+');
-  // console.log(query);
   picAPI.config.params.page = 1;
   refs.gallery.innerHTML = '';
   refs.loadMore.classList.add('is-hidden');
-
   let searchResult = await picAPI.getPictures(query);
-  console.log(searchResult);
   refs.searchQuery.value = '';
 
-  if (searchResult.length === 0) {
+  if (searchResult.hits.length === 0) {
     Notify.failure(
       'Sorry, there are no images matching your query. Try again.'
     );
   } else {
-    Notify.success('Hooray! We found totalHits images.');
-    renderMarkup(searchResult);
-    // if (searchResult.length > picAPI.config.params.per_page)
-    refs.loadMore.classList.remove('is-hidden');
+    Notify.success(`Hooray! We found ${searchResult.totalHits} images.`);
+    renderMarkup(searchResult.hits);
+    if (searchResult.totalHits > picAPI.config.params.per_page)
+      refs.loadMore.classList.remove('is-hidden');
   }
 }
 async function onLoadMoreClick() {
   picAPI.config.params.page += 1;
   let searchResult = await picAPI.getPictures();
-  if (searchResult.length === 0) {
+  if (searchResult.hits.length === 0) {
     Notify.failure(
       'Sorry, there are no images matching your query. Try again.'
     );
+    refs.loadMore.classList.add('is-hidden');
   } else {
-    Notify.success('Hooray! We found totalHits images.');
-    renderMarkup(searchResult);
+    // Notify.success('Hooray! We found totalHits images.');
+    renderMarkup(searchResult.hits);
     refs.loadMore.classList.remove('is-hidden');
+    if (
+      searchResult.totalHits / picAPI.config.params.page <=
+      picAPI.config.params.per_page
+    ) {
+      Notify.info('Last page');
+      refs.loadMore.classList.add('is-hidden');
+    }
   }
 }
 function renderMarkup(result) {
